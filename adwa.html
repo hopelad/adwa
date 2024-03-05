@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lottery Game</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('c.jpg'); /* Replace 'c.jpg' with the path to your image */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .content {
+    padding: 20px;
+    display: none; /* Hide all content sections by default */
+  }
+  .content.active {
+    display: block; /* Display only the active content section */
+  }
+  .box {
+    width: 80%;
+    margin: 0 auto;
+    padding: 30px;
+    text-align: center;
+    background: rgba(169, 223, 218, 0.8);
+    border-radius: 10px;
+  }
+  .odometer {
+    font-size: 12em;
+    background: #fff;
+    border-radius: 40px 40px 0 0;
+    margin-top: 50px;
+    border-bottom: 2px solid #ddd;
+  }
+  .btn-winner {
+    font-size: 2em;
+    background: #6c9dc9;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 20px; /* Add margin at the bottom to separate from the bottom of the screen */
+  }
+  .btn-winner:hover {
+    transition-duration: 0.1s;
+    box-shadow:  0 0 18px rgba(255, 255, 255, 0.75);
+    user-select: none;
+  }
+  .selected-options {
+    font-size: 2em; /* Increase font size for selected options */
+    margin-top: 20px; /* Add margin for spacing */
+  }
+  .selected-numbers {
+    font-size: 2em; /* Increase font size for selected numbers */
+    margin-top: 20px; /* Add margin for spacing */
+  }
+  .btn-done {
+    font-size: 2em;
+    background: #4CAF50;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 30px; /* Add margin at the top */
+  }
+  .btn-done:hover {
+    transition-duration: 0.1s;
+    box-shadow:  0 0 18px rgba(101, 230, 50, 0.75);
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="lottery" class="content active">
+  <div class="box">
+    <div id="odometer" class="odometer">0</div>
+    <div class="btn-winner" onclick="getWinner(1);">Get Winner1</div>
+    <div class="btn-winner" onclick="getWinner(2);">Get Winner2</div>
+    <div class="btn-winner" onclick="getWinner(3);">Get Winner3</div>
+
+    <div class="box">
+      <h1>Winners</h1>
+      <div id="selectedNumbers1" class="selected-numbers"></div>
+      <div id="selectedNumbers2" class="selected-numbers"></div>
+      <div id="selectedNumbers3" class="selected-options"></div> 
+    </div>
+    <button class="btn-done" onclick="rules()">Rules</button>
+    <button class="btn-done" onclick="goToNextPage()">DONE</button>
+  </div>
+</div>
+
+<script type="text/javascript">
+  var selectedNumbers = [[], [], []]; 
+  var selectedOptions = []; 
+
+  function generateRandom(maxLimit = 300) {
+    let rand = Math.random() * maxLimit;
+    rand = Math.floor(rand);
+    return rand.toString(2); 
+  }
+
+  function getWinner(buttonNumber) {
+    let btnIndex = buttonNumber - 1;
+    let buttons = document.getElementsByClassName('btn-winner');
+    buttons[btnIndex].innerHTML = 'Please wait for the result ....';
+    let interval = setInterval(function () {
+      document.getElementById('odometer').innerHTML = generateRandom();
+    }, 50);
+
+    setTimeout(function () {
+      clearInterval(interval);
+      let selectedNumber = document.getElementById('odometer').innerHTML;
+      selectedNumbers[btnIndex].push(selectedNumber);
+      if (buttonNumber === 3) {
+        let randomChoice = Math.floor(Math.random() * 3) + 1;
+        if (randomChoice === 1) {
+          selectedOptions.push("Dance For US");
+        } else if (randomChoice === 2) {
+          selectedOptions.push("Solo Sing ");
+        } else {
+          selectedOptions.push("Tell Us Joke");
+        }
+        buttons[btnIndex].innerHTML = 'Get Winner' + buttonNumber;
+        displaySelectedNumbers(); 
+      } else {
+        buttons[btnIndex].innerHTML = 'Get Winner' + buttonNumber;
+        displaySelectedNumbers(); 
+      }
+    }, 10000);
+  }
+
+  function displaySelectedNumbers() {
+    document.getElementById('selectedNumbers1').innerHTML = "1st Winner: " + selectedNumbers[0];
+    document.getElementById('selectedNumbers2').innerHTML = "2nd Winner: " + selectedNumbers[1];
+    document.getElementById('selectedNumbers3').innerHTML = "3rd Winner: " + selectedOptions; 
+  }
+
+  function goToNextPage() {
+    window.location.href = "index.html";
+  }
+  function rules() {
+    window.location.href = "rule.jpg";
+  }
+</script>
+
+</body>
+</html>
